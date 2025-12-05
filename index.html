@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRR Bank Limited</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { font-family: 'Inter', sans-serif; background: #0a0b0f; color: white; width: 100%; height: 100%; }
+        h1, h2, h3 { font-family: 'Outfit', sans-serif; }
+        .glass-panel { background: rgba(15,17,22,0.8); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); }
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 50; align-items: center; justify-content: center; }
+        .modal.active { display: flex !important; }
+        .modal-content { background: rgba(15,17,22,0.95); border: 1px solid rgba(255,255,255,0.1); border-radius: 1rem; padding: 2rem; max-width: 500px; width: 90%; }
+        .stat-card { background: rgba(15,17,22,0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.75rem; padding: 1.5rem; }
+        .stat-card.highlighted { border-color: rgba(16,185,129,0.3); background: rgba(16,185,129,0.05); }
+        .stat-card.text-primary { color: #10b981; }
+        table tbody tr:hover { background: rgba(255,255,255,0.05) !important; }
+        input::placeholder { color: rgba(107,114,128,1); }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
+        ::-webkit-scrollbar-thumb { background: rgba(16,185,129,0.3); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(16,185,129,0.5); }
+    </style>
+</head>
+<body>
+
+    <!-- AUTH PAGE -->
+    <div id="authPage" style="display: grid; grid-template-columns: 1fr 1fr; width: 100%; height: 100vh; position: relative;">
+        <div style="position: absolute; inset: 0; background: url('https://grainy-gradients.vercel.app/noise.svg'); opacity: 0.2; pointer-events: none; mix-blend-mode: overlay;"></div>
+        <div style="position: absolute; inset: 0; overflow: hidden; pointer-events: none;">
+            <div style="position: absolute; top: 0; left: 25%; width: 1px; height: 100%; background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.05), transparent);"></div>
+            <div style="position: absolute; top: 0; left: 50%; width: 1px; height: 100%; background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.05), transparent);"></div>
+            <div style="position: absolute; top: 0; left: 75%; width: 1px; height: 100%; background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.05), transparent);"></div>
+            <div class="hologram"></div>
+        </div>
+        <!-- LEFT SIDE - BRANDING & INFO -->
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 3rem; position: relative; z-index: 10; background: linear-gradient(135deg, rgba(10,11,15,0.5), rgba(16,185,129,0.05));">
+            <div style="text-align: center; margin-bottom: 3rem;">
+                <div style="display: flex; align-items: center; justify-content: center; gap: 0.75rem; margin-bottom: 1rem;">
+                    <div style="font-size: 2.2rem; color: #10b981;"><i class="fas fa-university"></i></div>
+                    <h1 style="font-size: 2rem; font-weight: 700; color: #10b981;">TRR Bank Limited </h1>
+                </div>
+                <p style="font-size: 1rem; color: rgba(209,213,219,0.7); margin-bottom: 2rem; max-width: 320px; line-height: 1.6;">Secure Banking • Innovative Technology  </p>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; justify-items: center; width: 100%; max-width: 400px;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 2rem; color: #10b981; margin-bottom: 0.75rem;"><i class="fas fa-lock"></i></div>
+                        <p style="font-size: 0.85rem; color: rgba(209,213,219,0.7); font-weight: 500; line-height: 1.4;">Military<br/>Grade<br/>Security</p>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 2rem; color: #10b981; margin-bottom: 0.75rem;"><i class="fas fa-bolt"></i></div>
+                        <p style="font-size: 0.85rem; color: rgba(209,213,219,0.7); font-weight: 500; line-height: 1.4;">Lightning<br/>Fast<br/>Transactions</p>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 2rem; color: #10b981; margin-bottom: 0.75rem;"><i class="fas fa-shield-alt"></i></div>
+                        <p style="font-size: 0.85rem; color: rgba(209,213,219,0.7); font-weight: 500; line-height: 1.4;">24/7<br/>Protected<br/>Access</p>
+                    </div>
+                </div>
+            </div>
+            <div style="width: 100%; max-width: 300px; height: 200px; border: 2px solid rgba(16, 185, 129, 0.3); border-radius: 1rem; background: rgba(16, 185, 129, 0.05); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;">
+                <div style="position: absolute; inset: 0; background: linear-gradient(45deg, transparent 30%, rgba(16, 185, 129, 0.1) 50%, transparent 70%); animation: shimmer 3s infinite;"></div>
+                <div style="text-align: center; position: relative; z-index: 2;">
+                    <div style="font-size: 3rem; color: #10b981; margin-bottom: 0.5rem;"><i class="fas fa-cube"></i></div>
+                    <p style="color: rgba(209,213,219,0.7); font-size: 0.95rem;">Next-Gen Banking<br/>Ready</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="display: flex; align-items: center; justify-content: center; padding: 1.5rem; position: relative; z-index: 20;">
+            <div style="width: 100%; max-width: 480px;" onmousemove="handleMouseMove(event)">
+                <div class="glass-panel" style="border-radius: 1rem; padding: 2rem; position: relative; overflow: hidden;">
+                    <div id="spotlight" style="position: absolute; inset: 0; opacity: 0; transition: opacity 300ms; border-radius: 1rem; pointer-events: none;"></div>
+                    <div style="position: relative; z-index: 10;">
+                        <div style="text-align: center; margin-bottom: 2rem;">
+                            <div style="width: 48px; height: 48px; margin: 0 auto 1rem; border-radius: 50%; background: linear-gradient(to right, #10b981, #3b82f6); display: flex; align-items: center; justify-content: center;"><i class="fas fa-bank" style="color: white; font-size: 1.5rem;"></i></div>
+                            <h1 style="font-size: 1.5rem; font-weight: bold;">Welcome Back</h1>
+                            <p style="color: rgba(209,213,219,1); font-size: 0.875rem; margin-top: 0.5rem;">Access your banking dashboard</p>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; background: rgba(0,0,0,0.4); padding: 0.25rem; border-radius: 0.5rem; border: 1px solid rgba(255,255,255,0.05);">
+                            <button onclick="switchTab('signup')" id="tabSignup" style="flex: 1; padding: 0.5rem; border-radius: 0.375rem; font-size: 0.875rem; font-weight: 500; background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: none; cursor: pointer;">Sign Up</button>
+                            <button onclick="switchTab('login')" id="tabLogin" style="flex: 1; padding: 0.5rem; border-radius: 0.375rem; font-size: 0.875rem; font-weight: 500; color: rgba(209,213,219,1); background: transparent; border: none; cursor: pointer;">Login</button>
+                        </div>
+                        <form id="signupForm" onsubmit="handleSignup(event)">
+                            <div id="signupStep1">
+                                <input type="text" id="firstName" placeholder="First Name" style="width: 100%; padding: 0.5rem 1rem; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.5rem; height: 40px; color: white; margin-bottom: 0.75rem; font-family: 'Inter';"><input type="text" id="lastName" placeholder="Last Name" style="width: 100%; padding: 0.5rem 1rem; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.5rem; height: 40px; color: white; margin-bottom: 0.75rem; font-family: 'Inter';"><input type="email" id="email" placeholder="Email" style="width: 100%; padding: 0.5rem 1rem; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.5rem; height: 40px; color: white; margin-bottom: 1rem; font-family: 'Inter';"><button type="button" onclick="nextSignupStep()" style="width: 100%; padding: 0.5rem; background: #059669; color: white; font-weight: bold; border-radius: 0.5rem; border: none; cursor: pointer;">Next <i class="fas fa-arrow-right" style="margin-left: 0.5rem;"></i></button>
+                            </div>
+                            <div id="signupStep2" style="display: none;">
+                                <input type="tel" id="phone" placeholder="Phone" style="width: 100%; padding: 0.5rem 1rem; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.5rem; height: 40px; color: white; margin-bottom: 0.75rem; font-family: 'Inter';"><input type="text" id="signupUsername" placeholder="Username" style="width: 100%; padding: 0.5rem 1rem; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.5rem; height: 40px; color: white; margin-bottom: 0.75rem; font-family: 'Inter';"><input type="password" id="signupPassword" placeholder="Password" style="width: 100%; padding: 0.5rem 1rem; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.5rem; height: 40px; color: white; margin-bottom: 1rem; font-family: 'Inter';"><div style="display: flex; gap: 0.5rem;"><button type="button" onclick="prevSignupStep()" style="flex: 1; padding: 0.5rem; background: rgba(55,65,81,1); color: white; font-weight: bold; border-radius: 0.5rem; border: none; cursor: pointer;"><i class="fas fa-arrow-left" style="margin-right: 0.5rem;"></i>Back</button><button type="submit" style="flex: 1; padding: 0.5rem; background: #059669; color: white; font-weight: bold; border-radius: 0.5rem; border: none; cursor: pointer;">Create Account</button></div>
+                            </div>
+                        </form>
+                        <form id="loginForm" onsubmit="handleLogin(event)" style="display: none;" autocomplete="off">
+                            <input type="text" id="loginUsername" placeholder="Username" autocomplete="off" style="width: 100%; padding: 0.5rem 1rem; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.5rem; height: 40px; color: white; margin-bottom: 0.75rem; font-family: 'Inter';"><input type="password" id="loginPassword" placeholder="Password" autocomplete="off" style="width: 100%; padding: 0.5rem 1rem; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.5rem; height: 40px; color: white; margin-bottom: 1rem; font-family: 'Inter';"><button type="submit" style="width: 100%; padding: 0.5rem; background: #059669; color: white; font-weight: bold; border-radius: 0.5rem; border: none; cursor: pointer;">Secure Login</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DASHBOARD PAGE -->
+    <div id="dashboardPage" style="display: none; flex-direction: row; height: 100vh;">
+        <aside class="glass-panel" style="width: 200px; border-right: 1px solid rgba(255,255,255,0.1); padding: 1.5rem; height: 100vh; overflow-y: auto; background: rgba(15,17,22,0.95); flex-shrink: 0;">
+            <h2 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 2rem;"><i class="fas fa-bank" style="color: #10b981; margin-right: 0.5rem;"></i>TRR Bank Limited</h2>
+            <nav style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 3rem;">
+                <button onclick="showDashView('dashboard')" style="width: 100%; text-align: left; padding: 0.75rem 1rem; border-radius: 0.5rem; border: none; background: rgba(16,185,129,0.1); color: #10b981; cursor: pointer; font-family: 'Inter'; font-size: 0.95rem; transition: all 200ms;"><i class="fas fa-th-large" style="margin-right: 0.75rem; width: 20px;"></i>Dashboard</button>
+                <button onclick="showDashView('customers')" style="width: 100%; text-align: left; padding: 0.75rem 1rem; border-radius: 0.5rem; border: none; color: rgba(209,213,219,1); cursor: pointer; font-family: 'Inter'; font-size: 0.95rem; transition: all 200ms;"><i class="fas fa-users" style="margin-right: 0.75rem; width: 20px;"></i>Customers</button>
+                <button onclick="showDashView('accounts')" style="width: 100%; text-align: left; padding: 0.75rem 1rem; border-radius: 0.5rem; border: none; color: rgba(209,213,219,1); cursor: pointer; font-family: 'Inter'; font-size: 0.95rem; transition: all 200ms;"><i class="fas fa-wallet" style="margin-right: 0.75rem; width: 20px;"></i>Accounts</button>
+                <button onclick="showDashView('transactions')" style="width: 100%; text-align: left; padding: 0.75rem 1rem; border-radius: 0.5rem; border: none; color: rgba(209,213,219,1); cursor: pointer; font-family: 'Inter'; font-size: 0.95rem; transition: all 200ms;"><i class="fas fa-exchange-alt" style="margin-right: 0.75rem; width: 20px;"></i>Transactions</button>
+                <button onclick="showDashView('audit')" style="width: 100%; text-align: left; padding: 0.75rem 1rem; border-radius: 0.5rem; border: none; color: rgba(209,213,219,1); cursor: pointer; font-family: 'Inter'; font-size: 0.95rem; transition: all 200ms;"><i class="fas fa-shield-alt" style="margin-right: 0.75rem; width: 20px;"></i>Audit Log</button>
+            </nav>
+            <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1);">
+                <div style="background: rgba(0,0,0,0.4); padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem; text-align: center; font-size: 0.85rem;">
+                    <p style="color: rgba(107,114,128,1); margin-bottom: 0.5rem;">Logged in as</p>
+                    <p style="font-weight: bold;" id="userNameDisplay">Administrator</p>
+                    <p style="font-size: 0.7rem; color: #10b981; margin-top: 0.25rem;" id="userRoleDisplay">(Admin)</p>
+                </div>
+                <button onclick="doLogout()" style="width: 100%; text-align: left; padding: 0.75rem 1rem; border-radius: 0.5rem; border: none; background: transparent; color: #ef4444; cursor: pointer; font-family: 'Inter'; font-size: 0.95rem;"><i class="fas fa-sign-out-alt" style="margin-right: 0.75rem;"></i>Logout</button>
+            </div>
+        </aside>
+
+        <main style="flex: 1; padding: 2rem; overflow-y: auto; background: #0a0b0f;">
+            <!-- Dashboard -->
+            <div id="view-dashboard" class="view-section">
+                <h1 style="font-size: 2rem; font-weight: bold; margin-bottom: 0.5rem;">Dashboard Overview</h1>
+                <p style="color: rgba(107,114,128,1); margin-bottom: 2rem;">Welcome back, here's what's happening with your bank today.</p>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+                    <div class="stat-card highlighted" style="border-color: rgba(16,185,129,0.3); background: rgba(16,185,129,0.05);">
+                        <div style="display: flex; justify-content: space-between; align-items: start;">
+                            <div>
+                                <p style="font-size: 0.85rem; color: rgba(107,114,128,1); text-transform: uppercase; letter-spacing: 0.05em;">Total Liquidity</p>
+                                <p style="font-size: 1.75rem; font-weight: bold; color: #10b981; margin-top: 0.5rem;" id="totalLiq">Rs. 0</p>
+                                <p style="font-size: 0.75rem; color: #10b981; margin-top: 0.5rem;"><i class="fas fa-arrow-up" style="margin-right: 0.25rem;"></i>+20.1% from last month</p>
+                            </div>
+                            <i class="fas fa-dollar-sign" style="color: #10b981; font-size: 1.5rem; opacity: 0.3;"></i>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div style="display: flex; justify-content: space-between; align-items: start;">
+                            <div>
+                                <p style="font-size: 0.85rem; color: rgba(107,114,128,1); text-transform: uppercase; letter-spacing: 0.05em;">Active Customers</p>
+                                <p style="font-size: 1.75rem; font-weight: bold; margin-top: 0.5rem;" id="totalCust">0</p>
+                                <p style="font-size: 0.75rem; color: #10b981; margin-top: 0.5rem;"><i class="fas fa-arrow-up" style="margin-right: 0.25rem;"></i>+2 new this week</p>
+                            </div>
+                            <i class="fas fa-users" style="color: rgba(107,114,128,1); font-size: 1.5rem; opacity: 0.3;"></i>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div style="display: flex; justify-content: space-between; align-items: start;">
+                            <div>
+                                <p style="font-size: 0.85rem; color: rgba(107,114,128,1); text-transform: uppercase; letter-spacing: 0.05em;">Active Accounts</p>
+                                <p style="font-size: 1.75rem; font-weight: bold; margin-top: 0.5rem;" id="totalAcc">0</p>
+                                <p style="font-size: 0.75rem; color: rgba(107,114,128,1); margin-top: 0.5rem;">Across Savings & Current</p>
+                            </div>
+                            <i class="fas fa-activity" style="color: rgba(107,114,128,1); font-size: 1.5rem; opacity: 0.3;"></i>
+                        </div>
+                    </div>
+                    <div class="stat-card" style="background: rgba(255,255,255,0.05);">
+                        <div style="display: flex; justify-content: space-between; align-items: start;">
+                            <div>
+                                <p style="font-size: 0.85rem; color: rgba(107,114,128,1); text-transform: uppercase; letter-spacing: 0.05em;">System Status</p>
+                                <p style="font-size: 1.75rem; font-weight: bold; color: #10b981; margin-top: 0.5rem;">Operational</p>
+                                <p style="font-size: 0.75rem; color: rgba(107,114,128,1); margin-top: 0.5rem;">Last audit: Just now</p>
+                            </div>
+                            <div style="width: 8px; height: 8px; border-radius: 50%; background: #10b981; animation: pulse 2s infinite; opacity: 0.8;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem;">
+                    <div class="glass-panel" style="border-radius: 0.75rem; padding: 1.5rem;">
+                        <h3 style="font-size: 1.125rem; font-weight: bold; margin-bottom: 1.5rem;">Transaction Volume</h3>
+                        <div style="position: relative; height: 300px;"><canvas id="transactionChart"></canvas></div>
+                    </div>
+                    <div class="glass-panel" style="border-radius: 0.75rem; padding: 1.5rem;">
+                        <h3 style="font-size: 1.125rem; font-weight: bold; margin-bottom: 1.5rem;">Recent Activity</h3>
+                        <div id="recentActivity" style="display: flex; flex-direction: column; gap: 1rem;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Customers -->
+            <div id="view-customers" class="view-section" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <div>
+                        <h1 style="font-size: 2rem; font-weight: bold; margin-bottom: 0.25rem;">Customer Management</h1>
+                        <p style="color: rgba(107,114,128,1); font-size: 0.95rem;">View and manage bank customers</p>
+                    </div>
+                    <button id="addCustomerBtn" onclick="openModal('addCustomerModal')" style="padding: 0.75rem 1.5rem; background: #10b981; color: white; border: none; border-radius: 0.5rem; cursor: pointer; font-weight: bold; font-size: 0.95rem; display: none;"><i class="fas fa-plus" style="margin-right: 0.5rem;"></i>Add New Customer</button>
+                </div>
+
+                <div class="glass-panel" style="border-radius: 0.75rem; padding: 1.5rem; margin-bottom: 1.5rem;">
+                    <input type="text" id="searchCustomer" placeholder="Search by name or CNIC..." onkeyup="filterCustomers()" style="width: 100%; padding: 0.75rem 1rem; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.5rem; color: white; font-family: 'Inter'; font-size: 0.95rem;">
+                </div>
+
+                <div class="glass-panel" style="border-radius: 0.75rem; overflow: hidden;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead style="border-bottom: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.4);"><tr><th style="text-align: left; padding: 1rem; color: rgba(107,114,128,1); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">ID</th><th style="text-align: left; padding: 1rem; color: rgba(107,114,128,1); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">Name</th><th style="text-align: left; padding: 1rem; color: rgba(107,114,128,1); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">CNIC</th><th style="text-align: left; padding: 1rem; color: rgba(107,114,128,1); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">Contact</th><th style="text-align: left; padding: 1rem; color: rgba(107,114,128,1); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">Actions</th></tr></thead>
+                        <tbody id="customersTable" style="border-top: 1px solid rgba(255,255,255,0.1);"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Accounts -->
+            <div id="view-accounts" class="view-section" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <div>
+                        <h1 style="font-size: 2rem; font-weight: bold; margin-bottom: 0.25rem;">Account Management</h1>
+                        <p style="color: rgba(107,114,128,1); font-size: 0.95rem;">Manage all bank accounts</p>
+                    </div>
+                    <button id="addAccountBtn" onclick="openModal('addAccountModal')" style="padding: 0.75rem 1.5rem; background: #10b981; color: white; border: none; border-radius: 0.5rem; cursor: pointer; font-weight: bold; font-size: 0.95rem; display: none;"><i class="fas fa-plus" style="margin-right: 0.5rem;"></i>Add New Account</button>
+                </div>
+                <div class="glass-panel" style="border-radius: 0.75rem; overflow: hidden;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead style="border-bottom: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.4);"><tr><th style="text-align: left; padding: 1rem; color: rgba(107,114,128,1); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">Acc No</th><th style="text-align: left; padding: 1rem; color: rgba(107,114,128,1); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">Customer</th><th style="text-align: left; padding: 1rem; color: rgba(107,114,128,1); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">Type</th><th style="text-align: left; padding: 1rem; color: rgba(107,114,128,1); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">Balance</th><th style="text-align: left; padding: 1rem; color: rgba(107,114,128,1); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">Status</th></tr></thead>
+                        <tbody id="accountsTable" style="border-top: 1px solid rgba(255,255,255,0.1);"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Transactions -->
+            <div id="view-transactions" class="view-section" style="display: none;">
+                <h1 style="font-size: 2rem; font-weight: bold; margin-bottom: 0.5rem;">Teller Operations</h1>
+                <p style="color: rgba(107,114,128,1); font-size: 0.95rem; margin-bottom: 2rem;">Securely process deposits, withdrawals, and transfers.</p>
+                <div class="glass-panel" style="padding: 2rem; border-radius: 0.75rem; max-width: 800px;">
+                    <form onsubmit="handleTransaction(event)">
+                        <div style="display: flex; gap: 1rem; margin-bottom: 2rem; justify-content: center;">
+                            <button type="button" onclick="setTransType('deposit')" class="trans-tab" style="padding: 0.75rem 1.5rem; background: #10b981; color: white; border: none; border-radius: 0.5rem; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 200ms; display: flex; align-items: center; justify-content: center; gap: 0.5rem; flex: 0 1 auto;"><i class="fas fa-arrow-down"></i>Deposit</button>
+                            <button type="button" onclick="setTransType('withdraw')" class="trans-tab" style="padding: 0.75rem 1.5rem; background: rgba(75,85,99,0.5); color: rgba(209,213,219,1); border: none; border-radius: 0.5rem; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 200ms; display: flex; align-items: center; justify-content: center; gap: 0.5rem; flex: 0 1 auto;"><i class="fas fa-arrow-up"></i>Withdraw</button>
+                            <button type="button" onclick="setTransType('transfer')" class="trans-tab" style="padding: 0.75rem 1.5rem; background: rgba(75,85,99,0.5); color: rgba(209,213,219,1); border: none; border-radius: 0.5rem; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 200ms; display: flex; align-items: center; justify-content: center; gap: 0.5rem; flex: 0 1 auto;"><i class="fas fa-exchange-alt"></i>Transfer</button>
+                        </div>
+                        <div style="margin-bottom: 1.5rem;">
+                            <label style="display: block; font-size: 0.95rem; font-weight: 600; margin-bottom: 0.5rem; color: rgba(229,231,235,1);">Account Number</label>
+                            <input type="number" id="transAccNo" placeholder="Enter Account ID (e.g. 101)" style="width: 100%; padding: 0.75rem 1rem; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.5rem; color: white; font-family: 'Inter'; font-size: 0.95rem;" required>
+                        </div>
+                        <div id="transToAccDiv" style="display: none; margin-bottom: 1.5rem;">
+                            <label style="display: block; font-size: 0.95rem; font-weight: 600; margin-bottom: 0.5rem; color: rgba(229,231,235,1);">Transfer To Account</label>
+                            <input type="number" id="transToAccNo" placeholder="Enter recipient account ID" style="width: 100%; padding: 0.75rem 1rem; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.5rem; color: white; font-family: 'Inter'; font-size: 0.95rem;">
+                        </div>
+                        <div style="margin-bottom: 2rem;">
+                            <label style="display: block; font-size: 0.95rem; font-weight: 600; margin-bottom: 0.5rem; color: rgba(229,231,235,1);">Amount (Rs)</label>
+                            <input type="number" id="transAmount" placeholder="0.00" step="0.01" style="width: 100%; padding: 0.75rem 1rem; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.5rem; color: white; font-family: 'Inter'; font-size: 0.95rem;" required>
+                        </div>
+                        <button type="submit" style="width: 100%; padding: 1rem; background: #10b981; color: white; font-weight: 700; border-radius: 0.5rem; border: none; cursor: pointer; transition: all 200ms; font-size: 0.95rem;">Confirm Transaction</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Audit -->
+            <div id="view-audit" class="view-section" style="display: none;">
+                <h1 style="font-size: 2rem; font-weight: bold; margin-bottom: 1.5rem;">Audit Log</h1>
+                <div class="glass-panel" style="border-radius: 0.75rem; overflow: hidden;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead style="border-bottom: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.4);"><tr><th style="text-align: left; padding: 1rem; color: rgba(107,114,128,1); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">Time</th><th style="text-align: left; padding: 1rem; color: rgba(107,114,128,1); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">Operation</th><th style="text-align: left; padding: 1rem; color: rgba(107,114,128,1); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">Details</th></tr></thead>
+                        <tbody id="auditTable" style="border-top: 1px solid rgba(255,255,255,0.1);"></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- MODALS -->
+    <div id="addCustomerModal" class="modal">
+        <div class="modal-content">
+            <h2 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 1rem;">Add New Customer</h2>
+            <form onsubmit="handleAddCustomer(event)">
+                <input type="text" id="custName" placeholder="Full Name" style="width: 100%; padding: 0.75rem 1rem; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.5rem; color: white; margin-bottom: 0.75rem; font-family: 'Inter';" required>
+                <input type="text" id="custCNIC" placeholder="CNIC" style="width: 100%; padding: 0.75rem 1rem; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.5rem; color: white; margin-bottom: 0.75rem; font-family: 'Inter';" required>
+                <input type="tel" id="custContact" placeholder="Contact Number" style="width: 100%; padding: 0.75rem 1rem; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.5rem; color: white; margin-bottom: 1rem; font-family: 'Inter';">
+                <div style="display: flex; gap: 0.5rem;">
+                    <button type="button" onclick="closeModal('addCustomerModal')" style="flex: 1; padding: 0.75rem; background: rgb(55,65,81); color: white; border: none; border-radius: 0.5rem; cursor: pointer; font-weight: 500;">Cancel</button>
+                    <button type="submit" style="flex: 1; padding: 0.75rem; background: #10b981; color: white; font-weight: bold; border: none; border-radius: 0.5rem; cursor: pointer;">Add Customer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="addAccountModal" class="modal">
+        <div class="modal-content">
+            <h2 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 1rem;">Add New Account</h2>
+            <form onsubmit="handleAddAccount(event)">
+                <select id="accCustomer" style="width: 100%; padding: 0.75rem 1rem; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.5rem; color: white; margin-bottom: 0.75rem; font-family: 'Inter';"><option value="">Select Customer</option></select>
+                <input type="text" id="accType" placeholder="Account Type (Savings/Current)" style="width: 100%; padding: 0.75rem 1rem; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.5rem; color: white; margin-bottom: 0.75rem; font-family: 'Inter';" required>
+                <input type="number" id="accBalance" placeholder="Initial Balance" style="width: 100%; padding: 0.75rem 1rem; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.5rem; color: white; margin-bottom: 1rem; font-family: 'Inter';" required>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button type="button" onclick="closeModal('addAccountModal')" style="flex: 1; padding: 0.75rem; background: rgb(55,65,81); color: white; border: none; border-radius: 0.5rem; cursor: pointer; font-weight: 500;">Cancel</button>
+                    <button type="submit" style="flex: 1; padding: 0.75rem; background: #10b981; color: white; font-weight: bold; border: none; border-radius: 0.5rem; cursor: pointer;">Add Account</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
